@@ -1,18 +1,106 @@
 [
   {
-    "title": "VAMOS A VER",
-    "url": "https://wwwwwwwww",
-    "description": "youtube you tune",
-    "format": "watch",
-    "verified": true,
-    "last_checked": "2026-05-30"
-  },
-  {
     "title": "UN Sustainable Development Goals",
     "url": "https://sdgs.un.org/",
-    "description": "Global framework of 17 interconnected goals.",
+    "description": "Global framework of 17 interconnected goals addressing climate change, circular resources, and social inequities to guide corporate policies.",
     "verified": true,
     "last_checked": "2026-05-30",
     "format": "read"
+  },
+  {
+    "title": "Ellen MacArthur Foundation",
+    "url": "https://ellenmacarthurfoundation.org/",
+    "description": "Leading global advocate for the circular economy, offering research, design guidelines, and circular transition framework resources.",
+    "verified": true,
+    "last_checked": "2026-05-30",
+    "format": "read"
+  },
+  {
+    "title": "World Resources Institute (WRI)",
+    "url": "https://www.wri.org/",
+    "description": "Global research organization providing datasets, greenhouse gas calculators, and reports mapping environmental policy and economic well-being.",
+    "verified": true,
+    "last_checked": "2026-05-30",
+    "format": "read"
+  },
+  {
+    "title": "IFRS - SASB Standards",
+    "url": "https://www.sasb.org/",
+    "description": "Industry-specific sustainability disclosure standards outlining the specific subset of environmental issues material to corporate valuation.",
+    "verified": true,
+    "last_checked": "2026-05-30",
+    "format": "read"
+  },
+  {
+    "title": "B Corp Certification Guidelines",
+    "url": "https://bcorporation.net/",
+    "description": "Framework defining the verified social and environmental performance standards, transparency metrics, and legal duty changes for business audits.",
+    "verified": true,
+    "last_checked": "2026-05-30",
+    "format": "read"
+  },
+  {
+    "title": "TED Talk: The Investment Logic for Sustainability",
+    "url": "https://www.youtube.com/watch?v=rpOwTspdwkI&t=402s",
+    "description": "Chris McKnett makes the financial business case for sustainability, demonstrating why institutional investors must look at ESG data.",
+    "verified": true,
+    "last_checked": "2026-05-30",
+    "format": "watch"
+  },
+  {
+    "title": "TED Institute: The Dark Side of Storytelling",
+    "url": "https://www.youtube.com/watch?v=3SUIiF-ifIM&t=29s",
+    "description": "Suzanne Duncan challenges standard narrative-based ESG reporting, highlighting why objective, financial metrics are vital.",
+    "verified": true,
+    "last_checked": "2026-05-30",
+    "format": "watch"
+  },
+  {
+    "title": "Mark Carney: Breaking the Tragedy of the Horizon",
+    "url": "https://www.youtube.com/watch?v=V5c-eqNxeSQ",
+    "description": "Historic address by the former Governor of the Bank of England on systemic climate change liability, transition paths, and finance.",
+    "verified": true,
+    "last_checked": "2026-05-30",
+    "format": "watch"
+  },
+  {
+    "title": "SASB: Markets Make the World Go Round",
+    "url": "https://www.youtube.com/watch?v=RM23v6Fax80",
+    "description": "Animated educational breakdown illustrating how financial capital markets act as powerful drivers for sustainability accounting standards.",
+    "verified": true,
+    "last_checked": "2026-05-30",
+    "format": "watch"
+  },
+  {
+    "title": "GreenBiz 350 Podcast",
+    "url": "https://www.greenbiz.com/350",
+    "description": "Weekly leading corporate sustainability broadcast checking news, supply chain circularity, and environmental regulations.",
+    "verified": true,
+    "last_checked": "2026-05-30",
+    "format": "listen"
+  },
+  {
+    "title": "Bloomberg Surveillance",
+    "url": "https://www.bloomberg.com/podcasts/surveillance",
+    "description": "Global economic surveillance analysis, providing interviews with directors about ESG integrations, green bonds, and SEC rulings.",
+    "verified": true,
+    "last_checked": "2026-05-30",
+    "format": "listen"
+  },
+  {
+    "title": "PRI Podcasts (Libsyn Channel)",
+    "url": "http://pripodcasts.libsyn.com/",
+    "description": "Conversations with institutional allocators on the actual integration of ESG factors into diverse equity and debt portfolios.",
+    "verified": true,
+    "last_checked": "2026-05-30",
+    "format": "listen"
+  },
+  {
+    "title": "BBC Radio: Costing the Earth",
+    "url": "http://www.bbc.co.uk/programmes/b006r4wn/episodes/downloads",
+    "description": "BBC environmental audio show evaluating world resources boundaries, policy loopholes, and carbon footprints audit schemes.",
+    "verified": true,
+    "last_checked": "2026-05-30",
+    "format": "listen"
   }
 ]
