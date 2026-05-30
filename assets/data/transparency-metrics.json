@@ -1,0 +1,41 @@
+{
+  "transparency": {
+    "reporting_period": "2026 Q1",
+    "last_updated": "2026-05-30",
+    "metrics": [
+      {
+        "name": "Operational Carbon Footprint",
+        "value": "1.25 tCO2e",
+        "scope": "Scope 1, 2, & 3 (Business Travel & Cloud Computing)",
+        "status": "Minimized",
+        "description": "Calculated total greenhouse gas emissions of our virtual consultancy office, including travel and server execution."
+      },
+      {
+        "name": "Client Sustainability Goals Achievement Rate",
+        "value": "84%",
+        "scope": "Active Client Engagements (2024-2025)",
+        "status": "On Track",
+        "description": "Percentage of clients that successfully established material ESG metrics and completed initial external reports within 12 months."
+      },
+      {
+        "name": "Digital Resource Investment",
+        "value": "15% of annual revenue",
+        "scope": "R&D in Digital Sostenibilidad & Education Hubs",
+        "status": "Active",
+        "description": "Portion of revenue re-invested directly into open-source research and educational resources for corporate sustainability."
+      }
+    ],
+    "challenges": [
+      {
+        "area": "Scope 3 Supply Chain (Cloud Infrastructure)",
+        "reality": "Our website and tools rely on cloud systems. While hosted on carbon-neutral regions, server loads still draw physical power.",
+        "mitigation_plan": "We redesigned this website to Jamstack static assets, reducing page weight from 18MB to under 800KB, which directly saves client CPU cycles and data transfer emissions."
+      },
+      {
+        "area": "Client Indirect Offsets",
+        "reality": "We guide clients to identify material risks, but we cannot legally force client boards to execute the final mitigation budgets.",
+        "mitigation_plan": "We are expanding our training material to include financial fiduciary duty arguments, demonstrating that ignoring material ESG risks violates board legal duties."
+      }
+    ]
+  }
+}

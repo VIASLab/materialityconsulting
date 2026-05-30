@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Sustainability Hub & Resources | Materiality Consulting</title>
+    <meta name="description" content="Verified ESG standards, certifications, videos, and podcasts curated by Materiality Consulting. Educational resources for transparency and advocacy.">
+    <link rel="icon" type="image/webp" href="../assets/images/favicon.webp">
+    
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="main-header">
+        <div class="header-container">
+            <a href="../index.html" class="logo-link">
+                <img src="../assets/images/logo.webp" alt="Materiality Consulting Icon" class="logo-img">
+                <div class="logo-text-group">
+                    <span class="logo-text-title">Materiality Consulting</span>
+                    <span class="logo-text-tagline">Essential ESG Support</span>
+                </div>
+            </a>
+            
+            <nav class="nav-menu" id="navMenu">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="../index.html#materiality" class="nav-link">Materiality</a>
+                <a href="../index.html#services" class="nav-link">Services</a>
+                <a href="#" class="nav-link active">Resources</a>
+                <a href="transparencia.html" class="nav-link">Transparency</a>
+                <a href="../index.html#contact" class="nav-link btn-contact">Contact</a>
+            </nav>
+            
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle Eco Mode" title="Toggle Eco Mode">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                    </svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                    <span class="eco-badge">Eco Mode</span>
+                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="subpage-layout">
+        <!-- Hero Title -->
+        <section class="subpage-hero">
+            <div class="container text-center">
+                <span class="badge">Education & Advocacy</span>
+                <h1>Environmental Resource Hub</h1>
+                <p class="subpage-lead">We believe that education is the first step toward material sustainability. Access verified standards, videos, and podcasts.</p>
+            </div>
+        </section>
+
+        <!-- Resources Section -->
+        <section class="resources-hub-section">
+            <div class="container">
+                <!-- Desktop Hub Layout -->
+                <div class="desktop-grid-hub">
+                    <!-- Search & Filters -->
+                    <div class="filter-controls">
+                        <div class="search-box-wrap">
+                            <input type="text" id="resourceSearch" placeholder="Search resources (e.g. B Corp, TED Talk, Bloomberg)..." aria-label="Search resources">
+                        </div>
+                        <div class="category-tabs-wrapper">
+                            <div class="category-tabs" id="categoryTabs">
+                                <button class="tab-btn active" data-category="all">All Formats</button>
+                                <button class="tab-btn" data-category="read">Read (Reports & Standards)</button>
+                                <button class="tab-btn" data-category="watch">Watch (Videos & Lectures)</button>
+                                <button class="tab-btn" data-category="listen">Listen (Podcasts & Audio)</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grid of Resources (Hydrated dynamically by script.js) -->
+                    <div class="resources-display-grid" id="resourcesGrid">
+                        <div class="loading-indicator text-center" style="grid-column: 1 / -1; padding: 40px 0;">
+                            <span class="badge">Hydrating...</span>
+                            <p>Connecting to verified environmental resources...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Accordion Hub Layout -->
+                <div class="mobile-accordion-hub" id="mobileAccordionHub">
+                    <!-- Hydrated dynamically on mobile viewports -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic CTA instead of suggestion form -->
+        <section class="contact-cta-section section-padding">
+            <div class="container max-width-600 text-center">
+                <span class="badge badge-accent">Strategic Engagement</span>
+                <h2>Custom ESG Alignment</h2>
+                <p>Carlos integrates these helpful resources and more to design the best strategy for your organization's ESG initiatives. Ready to evaluate your material risks?</p>
+                <div class="cta-actions" style="margin-top: 30px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                    <a href="mailto:carlos@materialityconsulting.com" class="btn btn-primary">
+                        Contact Carlos
+                    </a>
+                    <a href="../index.html#contact" class="btn btn-secondary">
+                        Send Message
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <a href="../index.html" class="logo-link" style="margin-bottom: 12px;">
+                    <img src="../assets/images/logo.webp" alt="Materiality Consulting Icon" class="logo-img">
+                    <div class="logo-text-group">
+                        <span class="logo-text-title">Materiality Consulting</span>
+                        <span class="logo-text-tagline">Essential ESG Support</span>
+                    </div>
+                </a>
+                <p>Strategic ESG & Sustainability Consulting based on Financial Materiality.</p>
+            </div>
+            
+            <div class="footer-meta">
+                <p>&copy; 2026 Materiality Consulting. All rights reserved.</p>
+                <div class="eco-indicator">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="leaf-icon">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                    </svg>
+                    <span>Digital Sustainability: &lt; 250KB Page Weight</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JS Logic -->
+    <script src="../script.js"></script>
+</body>
+</html>

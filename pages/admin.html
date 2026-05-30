@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Content Manager | Materiality Consulting</title>
+    <meta name="description" content="Manage external resources, articles, videos, and podcasts for the Materiality Environmental Resource Hub. Zero-emission serverless dashboard.">
+    <link rel="icon" type="image/webp" href="../assets/images/favicon.webp">
+    
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="../style.css">
+    
+    <style>
+        /* ── Admin Dashboard: Mobile-First ── */
+        .admin-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin: 24px 0;
+        }
+        .editor-card {
+            background: var(--card-bg);
+            border: 2px solid var(--card-border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            order: 1;
+        }
+        .admin-list-wrap { display: flex; flex-direction: column; gap: 16px; order: 2; }
+
+        /* ── Drag & Drop Zone ── */
+        .drop-zone {
+            border: 2px dashed var(--card-border);
+            border-radius: 16px;
+            padding: 32px 20px;
+            text-align: center;
+            background: var(--color-bg-alt);
+            transition: var(--transition);
+            cursor: pointer;
+            margin-bottom: 24px;
+        }
+        .drop-zone.drag-over { border-color: var(--color-primary); background: var(--color-primary-light); transform: scale(1.01); }
+        .drop-zone-icon { width: 48px; height: 48px; margin: 0 auto 12px; color: var(--color-text-muted); }
+        .drop-zone-icon svg { width: 100%; height: 100%; }
+        .drop-zone h3 { font-size: 1rem; margin-bottom: 4px; }
+        .drop-zone p { font-size: 0.82rem; color: var(--color-text-muted); }
+        #jsonFileInput { display: none; }
+
+        /* ── DB Controls Bar ── */
+        .db-controls {
+            display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+            justify-content: center;
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            padding: 14px 18px; border-radius: 12px; margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+        .db-controls .btn { font-size: 0.82rem; padding: 10px 16px; flex: 1 1 auto; text-align: center; }
+        #loadStatus {
+            width: 100%; text-align: center; font-size: 0.78rem; font-weight: 600;
+            color: var(--color-green); padding-top: 6px;
+        }
+
+        /* ── Item Cards ── */
+        .admin-item-card {
+            background: var(--card-bg); border: 1px solid var(--card-border);
+            border-radius: 14px; padding: 18px; transition: var(--transition);
+        }
+        .admin-item-card:hover { border-color: var(--color-primary); box-shadow: var(--shadow); }
+        .admin-item-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+        .admin-item-details { flex-grow: 1; }
+        .admin-item-details h4 { font-size: 1rem; margin-bottom: 4px; line-height: 1.3; }
+        .admin-item-details p { font-size: 0.82rem; margin-bottom: 8px; color: var(--color-text-muted);
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .admin-item-details a { font-size: 0.72rem; color: var(--color-blue); text-decoration: none; word-break: break-all; }
+        .admin-item-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 0.72rem; font-weight: 600; margin-bottom: 10px; }
+        .admin-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+        /* ── Buttons ── */
+        .btn-icon {
+            padding: 8px 14px; font-size: 0.8rem; font-weight: 600;
+            border-radius: 8px; border: none; cursor: pointer;
+            transition: var(--transition); font-family: var(--font-heading);
+        }
+        .btn-edit { background: rgba(31,71,136,0.08); color: var(--color-blue); }
+        .btn-edit:hover { background: var(--color-blue); color: #fff; }
+        .btn-delete { background: rgba(220,53,69,0.08); color: #dc3545; }
+        .btn-delete:hover { background: #dc3545; color: #fff; }
+
+        /* ── Format Pills ── */
+        .format-read { background: rgba(22,90,44,0.1); color: var(--color-green); }
+        .format-watch { background: rgba(31,71,136,0.1); color: var(--color-blue); }
+        .format-listen { background: rgba(229,90,43,0.1); color: var(--color-primary-dark); }
+
+        .badge-verified { background: rgba(22,90,44,0.08); color: var(--color-green); padding: 2px 8px; border-radius: 4px; }
+        .badge-unverified { background: rgba(26,26,26,0.06); color: var(--color-text-muted); padding: 2px 8px; border-radius: 4px; }
+
+        /* ── Form Tweaks ── */
+        .form-checkbox-group { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+        .form-checkbox-group input { width: 18px; height: 18px; cursor: pointer; }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+            background: #1a1a1a; color: #fff; padding: 14px 28px; border-radius: 12px;
+            font-family: var(--font-heading); font-size: 0.88rem; font-weight: 600;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25); z-index: 9999;
+            opacity: 0; transition: all 0.35s cubic-bezier(.4,0,.2,1); pointer-events: none;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* ── Empty State ── */
+        .empty-state { text-align: center; padding: 48px 20px; border: 2px dashed var(--card-border); border-radius: 16px; background: var(--card-bg); }
+        .empty-state svg { width: 56px; height: 56px; color: var(--color-text-muted); margin-bottom: 12px; }
+        .empty-state h3 { font-size: 1.1rem; margin-bottom: 6px; }
+        .empty-state p { font-size: 0.85rem; color: var(--color-text-muted); }
+
+        /* ── Desktop: 2 columns ── */
+        @media (min-width: 900px) {
+            .admin-layout { display: grid; grid-template-columns: 380px 1fr; gap: 36px; }
+            .editor-card { position: sticky; top: 100px; order: 0; }
+            .admin-list-wrap { order: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="main-header">
+        <div class="header-container">
+            <a href="../index.html" class="logo-link">
+                <img src="../assets/images/logo.webp" alt="Materiality Consulting Icon" class="logo-img">
+                <div class="logo-text-group">
+                    <span class="logo-text-title">Materiality Consulting</span>
+                    <span class="logo-text-tagline">Essential ESG Support</span>
+                </div>
+            </a>
+            
+            <nav class="nav-menu" id="navMenu">
+                <a href="../index.html" class="nav-link">Home</a>
+                <a href="recursos.html" class="nav-link">Resources</a>
+                <a href="transparencia.html" class="nav-link">Transparency</a>
+                <a href="#" class="nav-link active">Admin</a>
+            </nav>
+            
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle Eco Mode" title="Toggle Eco Mode">
+                    <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                    </svg>
+                    <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                    <span class="eco-badge">Eco Mode</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="subpage-layout">
+        <section class="subpage-hero" style="padding-bottom: 20px;">
+            <div class="container text-center">
+                <span class="badge">Zero-Emission CMS</span>
+                <h1>Content Manager</h1>
+                <p class="subpage-lead">Add, edit, or remove resources visually. Export the updated JSON and upload it to your hosting.</p>
+            </div>
+        </section>
+
+        <!-- Admin Workspace -->
+        <section class="admin-workspace-section">
+            <div class="container">
+
+                <!-- Drag & Drop Upload Zone -->
+                <div class="drop-zone" id="dropZone">
+                    <input type="file" id="jsonFileInput" accept=".json">
+                    <div class="drop-zone-icon">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    </div>
+                    <h3>Upload external-sources.json</h3>
+                    <p>Drag and drop your file here, or tap to browse</p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="db-controls">
+                    <button class="btn btn-primary" id="btnExportJSON">Export &amp; Download JSON</button>
+                    <button class="btn btn-secondary" id="btnPreview">Preview Resources Page</button>
+                    <span id="loadStatus">Loaded system data.</span>
+                </div>
+
+                <!-- Editor + List -->
+                <div class="admin-layout">
+                    <div class="editor-card">
+                        <h3 id="formTitle">Add New Resource</h3>
+                        <form id="resourceForm" class="contact-form">
+                            <input type="hidden" id="editIndex" value="-1">
+                            <div class="form-group">
+                                <label for="resTitle">Title</label>
+                                <input type="text" id="resTitle" placeholder="e.g. UN Sustainable Development Goals" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="resUrl">URL</label>
+                                <input type="url" id="resUrl" placeholder="https://..." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="resDesc">Description</label>
+                                <textarea id="resDesc" rows="3" placeholder="Brief summary..." required style="resize:vertical;"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="resFormat">Format</label>
+                                <select id="resFormat" style="padding:12px 16px;border-radius:8px;border:2px solid var(--card-border);background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);font-size:0.95rem;width:100%;">
+                                    <option value="read">Read (Reports)</option>
+                                    <option value="watch">Watch (Videos)</option>
+                                    <option value="listen">Listen (Podcasts)</option>
+                                </select>
+                            </div>
+                            <div class="form-checkbox-group">
+                                <input type="checkbox" id="resVerified" checked>
+                                <label for="resVerified" style="font-family:var(--font-heading);font-weight:600;font-size:0.85rem;">Mark as Verified</label>
+                            </div>
+                            <div style="display:flex;gap:10px;margin-top:10px;">
+                                <button type="submit" class="btn btn-primary btn-block" id="btnSubmitForm">Add to List</button>
+                                <button type="button" class="btn btn-secondary" id="btnCancelEdit" style="display:none;padding:12px;">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="admin-list-wrap">
+                        <h3>Resources (<span id="resourceCount">0</span>)</h3>
+                        <div id="adminItemsContainer"></div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <a href="../index.html" class="logo-link" style="margin-bottom: 12px;">
+                    <img src="../assets/images/logo.webp" alt="Materiality Consulting Icon" class="logo-img">
+                    <div class="logo-text-group">
+                        <span class="logo-text-title">Materiality Consulting</span>
+                        <span class="logo-text-tagline">Essential ESG Support</span>
+                    </div>
+                </a>
+                <p>Strategic ESG & Sustainability Consulting based on Financial Materiality.</p>
+            </div>
+            <div class="footer-meta">
+                <p>&copy; 2026 Materiality Consulting. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Theme toggler logic + admin functionality -->
+    <script>
+        // ECO MODE TOGGLE
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        htmlElement.setAttribute('data-theme', currentTheme);
+        
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const theme = htmlElement.getAttribute('data-theme');
+                const newTheme = theme === 'light' ? 'dark' : 'light';
+                htmlElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            });
+        }
+
+        // ── CMS LOGIC ──
+        let resources = [];
+        const $ = id => document.getElementById(id);
+        const adminItemsContainer = $('adminItemsContainer');
+        const resourceCount = $('resourceCount');
+        const resourceForm = $('resourceForm');
+        const editIndexInput = $('editIndex');
+        const formTitle = $('formTitle');
+        const btnSubmitForm = $('btnSubmitForm');
+        const btnCancelEdit = $('btnCancelEdit');
+        const loadStatus = $('loadStatus');
+        const jsonFileInput = $('jsonFileInput');
+        const dropZone = $('dropZone');
+        const toastEl = $('toast');
+
+        // ── Toast ──
+        function toast(msg) {
+            toastEl.textContent = msg;
+            toastEl.classList.add('show');
+            setTimeout(() => toastEl.classList.remove('show'), 2800);
+        }
+
+        // ── Drag & Drop ──
+        dropZone.addEventListener('click', () => jsonFileInput.click());
+        ['dragenter','dragover'].forEach(e => dropZone.addEventListener(e, ev => { ev.preventDefault(); dropZone.classList.add('drag-over'); }));
+        ['dragleave','drop'].forEach(e => dropZone.addEventListener(e, ev => { ev.preventDefault(); dropZone.classList.remove('drag-over'); }));
+        dropZone.addEventListener('drop', ev => { if(ev.dataTransfer.files.length) handleFile(ev.dataTransfer.files[0]); });
+        jsonFileInput.addEventListener('change', e => { if(e.target.files[0]) handleFile(e.target.files[0]); });
+
+        function handleFile(file) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (Array.isArray(data)) {
+                        resources = data;
+                        loadStatus.textContent = `Loaded ${file.name} (${resources.length} items)`;
+                        renderAdminList();
+                        toast(`${resources.length} resources loaded successfully`);
+                    } else { toast('Error: JSON must be an array'); }
+                } catch(err) { toast('Invalid JSON file'); }
+            };
+            reader.readAsText(file);
+        }
+
+        // ── Render List ──
+        const fmtLabels = { read:'Read', watch:'Watch', listen:'Listen' };
+        const fmtClasses = { read:'format-read', watch:'format-watch', listen:'format-listen' };
+
+        function renderAdminList() {
+            resourceCount.textContent = resources.length;
+            if (!resources.length) {
+                adminItemsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        <h3>No resources yet</h3>
+                        <p>Add one using the form, or upload your JSON file above.</p>
+                    </div>`;
+                return;
+            }
+            adminItemsContainer.innerHTML = resources.map((item, i) => `
+                <div class="admin-item-card">
+                    <div class="admin-item-top">
+                        <div class="admin-item-details">
+                            <div class="admin-item-meta">
+                                <span class="badge ${fmtClasses[item.format] || ''}" style="margin:0;padding:2px 10px;font-size:0.7rem;">${fmtLabels[item.format] || item.format}</span>
+                                ${item.verified ? '<span class="badge-verified">Verified</span>' : '<span class="badge-unverified">Unverified</span>'}
+                                <span style="color:var(--color-text-muted);">${item.last_checked || ''}</span>
+                            </div>
+                            <h4 style="margin-top:8px;">${esc(item.title)}</h4>
+                            <p>${esc(item.description)}</p>
+                            <a href="${item.url}" target="_blank">${item.url}</a>
+                        </div>
+                        <div class="admin-actions">
+                            <button class="btn-icon btn-edit" onclick="editItem(${i})">Edit</button>
+                            <button class="btn-icon btn-delete" onclick="deleteItem(${i})">Delete</button>
+                        </div>
+                    </div>
+                </div>`).join('');
+        }
+
+        function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+        // ── Load Data ──
+        function loadDefaultData() {
+            fetch('../assets/data/external-sources.json')
+                .then(r => { if(!r.ok) throw 0; return r.json(); })
+                .then(data => { resources = data; loadStatus.textContent = `Loaded ${resources.length} resources from server.`; renderAdminList(); })
+                .catch(() => { resources = [{title:"UN Sustainable Development Goals",url:"https://sdgs.un.org/",description:"Global framework of 17 interconnected goals.",verified:true,last_checked:"2026-05-30",format:"read"}]; loadStatus.textContent = 'Using template data (JSON not found).'; renderAdminList(); });
+        }
+
+        // ── Form Submit ──
+        resourceForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const item = {
+                title: $('resTitle').value.trim(),
+                url: $('resUrl').value.trim(),
+                description: $('resDesc').value.trim(),
+                format: $('resFormat').value,
+                verified: $('resVerified').checked,
+                last_checked: new Date().toISOString().split('T')[0]
+            };
+            const idx = parseInt(editIndexInput.value);
+            if (idx === -1) { resources.unshift(item); toast('Resource added'); }
+            else { resources[idx] = item; toast('Resource updated'); resetForm(); }
+            renderAdminList();
+            resourceForm.reset();
+            $('resFormat').value = 'read';
+            $('resVerified').checked = true;
+        });
+
+        // ── Edit / Delete / Cancel ──
+        window.editItem = function(i) {
+            const it = resources[i];
+            $('resTitle').value = it.title; $('resUrl').value = it.url;
+            $('resDesc').value = it.description; $('resFormat').value = it.format;
+            $('resVerified').checked = it.verified;
+            editIndexInput.value = i;
+            formTitle.textContent = 'Edit Resource';
+            btnSubmitForm.textContent = 'Save Changes';
+            btnCancelEdit.style.display = 'block';
+            document.querySelector('.editor-card').scrollIntoView({behavior:'smooth'});
+        };
+        window.deleteItem = function(i) {
+            if (confirm(`Delete "${resources[i].title}"?`)) {
+                resources.splice(i,1); renderAdminList(); toast('Resource deleted');
+                if (editIndexInput.value === i.toString()) resetForm();
+            }
+        };
+        btnCancelEdit.addEventListener('click', resetForm);
+        function resetForm() {
+            editIndexInput.value = '-1'; formTitle.textContent = 'Add New Resource';
+            btnSubmitForm.textContent = 'Add to List'; btnCancelEdit.style.display = 'none';
+            resourceForm.reset();
+        }
+
+        // ── Export ──
+        $('btnExportJSON').addEventListener('click', function() {
+            const jsonString = JSON.stringify(resources, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'external-sources.json';
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            // Use setTimeout to ensure the click registers as user-initiated
+            setTimeout(function() {
+                a.click();
+                setTimeout(function() {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 200);
+            }, 0);
+            toast('JSON downloaded');
+        });
+
+        // ── Preview ──
+        $('btnPreview').addEventListener('click', () => window.open('recursos.html','_blank'));
+
+        // ── Init ──
+        loadDefaultData();
+    </script>
+</body>
+</html>
